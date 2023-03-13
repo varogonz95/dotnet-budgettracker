@@ -8,14 +8,37 @@ namespace BudgetTracker.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IEnumerable<EndpointDataSource> endpointDataSources)
         {
             _logger = logger;
         }
 
         public IActionResult Index()
         {
-            return View();
+            var myBudgets = new List<Budget>() {
+                new Budget()
+                {
+                    Id = 1,
+                    Name= "Test 1",
+                    Amount= 150000,
+                    Description= "Test Description 1",
+                },
+                new Budget()
+                {
+                    Id = 2,
+                    Name= "Test 2",
+                    Amount= 20000,
+                    Description="Test Description 2"
+                },
+                new Budget() {
+                    Id = 3,
+                    Amount= 35500.58M ,
+                    Name="Test 3",
+                    Description="Test Description 3",
+
+                }
+            };
+            return View(myBudgets);
         }
 
         public IActionResult Privacy()

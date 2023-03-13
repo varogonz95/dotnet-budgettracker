@@ -1,11 +1,18 @@
+using BudgetTracker.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-
-var app = builder.Build();
+builder.Services.AddSingleton<EntityConfigFactory>();
+builder.Services.AddDbContext<BudgetTrackerContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("BudgetTrackerContext"));
+});
 
 // Configure the HTTP request pipeline.
+var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
