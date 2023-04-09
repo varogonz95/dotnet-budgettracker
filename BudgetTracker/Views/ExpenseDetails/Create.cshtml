@@ -1,4 +1,4 @@
-﻿@model BudgetTracker.Models.BudgetViewModel
+﻿@model BudgetTracker.Models.ExpenseDetail
 
 @{
     ViewData["Title"] = "Create";
@@ -7,7 +7,7 @@
 
 <h1>Create</h1>
 
-<h4>Budget</h4>
+<h4>ExpenseDetail</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -19,19 +19,18 @@
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
+                <label asp-for="ExpectedAmount" class="control-label"></label>
+                <input asp-for="ExpectedAmount" class="form-control" />
+                <span asp-validation-for="ExpectedAmount" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="CustomPeriodicity" class="control-label"></label>
-                <input asp-for="CustomPeriodicity" class="form-control" />
-                <span asp-validation-for="CustomPeriodicity" class="text-danger"></span>
+                <label asp-for="ActualAmount" class="control-label"></label>
+                <input asp-for="ActualAmount" class="form-control" />
+                <span asp-validation-for="ActualAmount" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Periodicity" class="control-label"></label>
-                <select asp-for="Periodicity" class="form-control" asp-items="@Model.Periodicities"></select>
-                <span asp-validation-for="Periodicity" class="text-danger"></span>
+                <label asp-for="BudgetId" class="control-label"></label>
+                <select asp-for="BudgetId" class ="form-control" asp-items="ViewBag.BudgetId"></select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

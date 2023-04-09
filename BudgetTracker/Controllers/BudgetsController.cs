@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BudgetTracker.Data;
 using BudgetTracker.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BudgetTracker.Controllers
 {
+    [Authorize]
     public class BudgetsController : Controller
     {
         private readonly AppDbContext _context;
@@ -21,9 +24,9 @@ namespace BudgetTracker.Controllers
         // GET: Budgets
         public async Task<IActionResult> Index()
         {
-              return _context.Budget != null ? 
-                          View(await _context.Budget.ToListAsync()) :
-                          Problem("Entity set 'BudgetTrackerContext.Budget'  is null.");
+            return _context.Budget != null ?
+                        View(await _context.Budget.ToListAsync()) :
+                        Problem("Entity set 'AppDbContext.Budget'  is null.");
         }
 
         // GET: Budgets/Details/5
@@ -47,7 +50,27 @@ namespace BudgetTracker.Controllers
         // GET: Budgets/Create
         public IActionResult Create()
         {
-            return View();
+            var periodicities = new List<SelectListItem>
+            {
+                new SelectListItem
+                {
+                    Disabled = true,
+                    Selected = true,
+                    Value = null,
+                    Text = "-Seleccione-",
+                },
+
+            };
+            periodicities.AddRange(
+                Enum.GetValues<PeriodicityType>()
+                .Select((e, i) => new SelectListItem
+                {
+                    Value = e.ToString(),
+                    Text = PeriodicityTypeDisplay.FromEnum(e)
+                })
+            );
+
+            return View(new BudgetViewModel { Periodicities = periodicities });
         }
 
         // POST: Budgets/Create
@@ -55,13 +78,13 @@ namespace BudgetTracker.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,Amount")] Budget budget)
+        public async Task<IActionResult> Create([Bind("Name,Description,CustomPeriodicity,Periodicity")] Budget budget)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(budget);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Create", "ExpenseDetails");
             }
             return View(budget);
         }
@@ -87,7 +110,7 @@ namespace BudgetTracker.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Amount")] Budget budget)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,CustomPeriodicity,Periodicity")] Budget budget)
         {
             if (id != budget.Id)
             {
@@ -142,21 +165,21 @@ namespace BudgetTracker.Controllers
         {
             if (_context.Budget == null)
             {
-                return Problem("Entity set 'BudgetTrackerContext.Budget'  is null.");
+                return Problem("Entity set 'AppDbContext.Budget'  is null.");
             }
             var budget = await _context.Budget.FindAsync(id);
             if (budget != null)
             {
                 _context.Budget.Remove(budget);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool BudgetExists(int id)
         {
-          return (_context.Budget?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Budget?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

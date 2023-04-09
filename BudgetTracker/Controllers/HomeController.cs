@@ -1,43 +1,23 @@
 ﻿using BudgetTracker.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
 namespace BudgetTracker.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger, IEnumerable<EndpointDataSource> endpointDataSources)
+        public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
         }
 
         public IActionResult Index()
         {
-            var myBudgets = new List<Budget>() {
-                new Budget()
-                {
-                    Id = 1,
-                    Name= "Test 1",
-                    Amount= 150000,
-                    Description= "Test Description 1",
-                },
-                new Budget()
-                {
-                    Id = 2,
-                    Name= "Test 2",
-                    Amount= 20000,
-                    Description="Test Description 2"
-                },
-                new Budget() {
-                    Id = 3,
-                    Amount= 35500.58M ,
-                    Name="Test 3",
-                    Description="Test Description 3",
-
-                }
-            };
+            var myBudgets = new List<Budget>() {};
             return View(myBudgets);
         }
 
