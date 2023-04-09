@@ -1,13 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using BudgetTracker.Models;
+using BudgetTracker.Areas.Identity.Data;
 
 namespace BudgetTracker.Data
 {
-    public class BudgetTrackerContext : DbContext
+    public class AppDbContext : DbContext
     {
-        private EntityConfigFactory _entityConfigFactory;
+        private readonly EntityConfigFactory _entityConfigFactory;
 
-        public BudgetTrackerContext(DbContextOptions<BudgetTrackerContext> options,
+        public AppDbContext(DbContextOptions<AppDbContext> options,
             EntityConfigFactory entityConfigFactory)
             : base(options)
         {
@@ -17,12 +18,16 @@ namespace BudgetTracker.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             var budgetConfig = _entityConfigFactory.Create<BudgetEntityConfig>(builder);
-            var userAccountConfig = _entityConfigFactory.Create<UserAccountConfig>(builder);
+            var expenseDetailConfig = _entityConfigFactory.Create<ExpenseDetailEntityConfig>(builder);
 
             budgetConfig.Configure();
-            userAccountConfig.Configure();
+            expenseDetailConfig.Configure();
+
+            builder.Ignore<AppUser>();
         }
 
         public DbSet<Budget> Budget { get; set; } = default!;
+
+        public DbSet<BudgetTracker.Models.ExpenseDetail> ExpenseDetail { get; set; } = default!;
     }
 }

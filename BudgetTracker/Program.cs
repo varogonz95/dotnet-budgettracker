@@ -1,15 +1,28 @@
 using BudgetTracker.Data;
 using Microsoft.EntityFrameworkCore;
+using BudgetTracker.Areas.Identity.Data;
 
 var builder = WebApplication.CreateBuilder(args);
+var defaultConnectionString = builder.Configuration.GetConnectionString("BudgetTrackerContext");
+var identityConnectionString = builder.Configuration.GetConnectionString("AppDbIdentityContext") 
+    ?? throw new InvalidOperationException("Connection string 'AppDbIdentityContext' not found.");
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
 builder.Services.AddSingleton<EntityConfigFactory>();
-builder.Services.AddDbContext<BudgetTrackerContext>(options =>
-{
-    options.UseSqlServer(builder.Configuration.GetConnectionString("BudgetTrackerContext"));
-});
+builder.Services.AddDbContext<AppDbContext>(options => 
+    options.UseSqlServer(defaultConnectionString)
+);
+builder.Services.AddDbContext<AppDbIdentityContext>(options =>
+    options.UseSqlServer(identityConnectionString)
+); 
+builder.Services.AddDefaultIdentity<AppUser>(
+    options =>
+    {
+        options.SignIn.RequireConfirmedAccount = true;
+    }
+).AddEntityFrameworkStores<AppDbIdentityContext>();
+builder.Services.AddControllersWithViews();
+
 
 // Configure the HTTP request pipeline.
 var app = builder.Build();
@@ -25,10 +38,10 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+app.MapRazorPages();
+app.MapDefaultControllerRoute();
 
 app.Run();

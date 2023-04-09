@@ -18,13 +18,13 @@ namespace BudgetTracker.Data
 
     public abstract class EntityConfig<E> where E : class
     {
-        protected readonly ModelBuilder modelBuilder;
+        protected readonly EntityTypeBuilder<E> entityTypeBuilder;
         public EntityConfig(ModelBuilder modelBuilder)
         {
-            this.modelBuilder = modelBuilder;
+            entityTypeBuilder = modelBuilder.Entity<E>();
         }
 
-        public virtual void Configure()
+        public void Configure()
         {
             ConfigureModel();
             ConfigureRelationships();

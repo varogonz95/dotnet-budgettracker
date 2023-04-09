@@ -1,41 +1,53 @@
-﻿using BudgetTracker.Models;
+﻿using BudgetTracker.Areas.Identity.Data;
+using BudgetTracker.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System.Data;
 
 namespace BudgetTracker.Data
 {
     internal class BudgetEntityConfig : EntityConfig<Budget>
     {
-        public BudgetEntityConfig(ModelBuilder modelBuilder) : base(modelBuilder) { }
+        public BudgetEntityConfig(ModelBuilder modelBuilder) : base(modelBuilder)
+        {
+        }
 
         protected override void ConfigureModel()
         {
-            var entityBuilder = modelBuilder.Entity<Budget>();
-            entityBuilder!.Property(m => m.UserAccountId)
-                .IsRequired();
-            entityBuilder!.Property(m => m.Name)
+            entityTypeBuilder!
+                .Property(m => m.Name)
                 .HasMaxLength(30)
                 .IsRequired();
-            entityBuilder!.Property(m => m.Description)
+            entityTypeBuilder!
+                .Property(m => m.Description)
                 .HasMaxLength(255);
-            entityBuilder!.Property(m => m.Amount)
-                .HasPrecision(11, 2)
+            entityTypeBuilder!
+                .Property(m => m.Periodicity)
+                .HasConversion<EnumToStringConverter<PeriodicityType>>()
+                .HasMaxLength(
+                    Enum.GetNames<PeriodicityType>()
+                        .Select(p => p.Length).Max()
+                    );
+            entityTypeBuilder!
+                .Property(m => m.CreatedDate)
+                .HasDefaultValueSql("getdate()")
                 .IsRequired();
-            entityBuilder!.Property(m => m.CreatedDate)
-                .IsRequired()
-                .HasDefaultValueSql("getdate()");
-            entityBuilder!.Property(m => m.UpdatedDate)
+            entityTypeBuilder!
+                .Property(m => m.UpdatedDate)
                 .HasDefaultValueSql("getdate()");
         }
 
         protected override void ConfigureRelationships()
         {
-            modelBuilder.Entity<Budget>()
-                .HasOne(b => b.UserAccount)
-                .WithMany(ua => ua.Budgets)
-                .HasForeignKey(b => b.UserAccountId)
-                .HasPrincipalKey(ua => ua.Id);
+            entityTypeBuilder
+                .HasMany<ExpenseDetail>()
+                .WithOne(exp => exp.Budget)
+                .HasForeignKey(exp => exp.BudgetId)
+                .HasPrincipalKey(bud => bud.Id);
 
+            entityTypeBuilder
+                .HasOne(e => e.AppUser)
+                .WithMany(e => e.Budgets);
         }
     }
 }
