@@ -361,3 +361,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# JS/CSS libraries
+BudgetTracker/wwwroot/lib/

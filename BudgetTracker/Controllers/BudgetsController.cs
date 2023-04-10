@@ -57,8 +57,8 @@ namespace BudgetTracker.Controllers
                     Disabled = true,
                     Selected = true,
                     Value = null,
-                    Text = "-Seleccione-",
-                },
+                    Text = "Select an option:",
+                }
 
             };
             periodicities.AddRange(
@@ -69,8 +69,8 @@ namespace BudgetTracker.Controllers
                     Text = PeriodicityTypeDisplay.FromEnum(e)
                 })
             );
-
-            return View(new BudgetViewModel { Periodicities = periodicities });
+            ViewData["Periodicities"] = periodicities;
+            return View();
         }
 
         // POST: Budgets/Create

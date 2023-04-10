@@ -12,15 +12,25 @@ namespace BudgetTracker.Models
         public int Id { get; set; }
 
         [Required]
+        [MaxLength(30)]
         public string? Name { get; set; }
 
+        [MaxLength(250)]
         public string? Description { get; set; }
-
-        [DataType(DataType.Date)]
-        public DateTime? CustomPeriodicity { get; set; }
 
         [Required]
         public PeriodicityType Periodicity { get; set; }
+
+        [Required]
+        [Display(Name = "Starting from")]
+        [DataType(DataType.Date)]
+        public DateTime? FromDate { get; set; }
+
+        [Display(Name ="Ends at")]
+        [DataType(DataType.Date)]
+        public DateTime? ToDate { get; set; }
+
+        public bool Repeats { get; set; }
 
         [ScaffoldColumn(false)]
         [DisplayName("Created At")]
@@ -43,8 +53,7 @@ namespace BudgetTracker.Models
         Weekly,
         Monthly,
         Yearly,
-        CustomFixed,
-        CustomRepeatable
+        Custom,
     }
 
     public static class PeriodicityTypeDisplay
@@ -53,8 +62,7 @@ namespace BudgetTracker.Models
         public static readonly string Weekly = "Weekly";
         public static readonly string Monthly = "Monthly";
         public static readonly string Yearly = "Yearly";
-        public static readonly string CustomFixed = "CustomFixed";
-        public static readonly string CustomRepeatable = "CustomRepeatable";
+        public static readonly string Custom = "Custom";
 
         public static string FromEnum(PeriodicityType periodicityType) => periodicityType switch
         {
@@ -62,9 +70,8 @@ namespace BudgetTracker.Models
             PeriodicityType.Weekly => "Weekly",
             PeriodicityType.Monthly => "Monthly",
             PeriodicityType.Yearly => "Yearly",
-            PeriodicityType.CustomFixed => "Custom Fixed",
-            PeriodicityType.CustomRepeatable => "Custom Repeatable",
-            _ => "NA",
+            PeriodicityType.Custom => "Custom",
+            _ => "Unknown",
         };
     };
 }

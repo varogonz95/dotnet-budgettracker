@@ -15,13 +15,6 @@ namespace BudgetTracker.Data
         protected override void ConfigureModel()
         {
             entityTypeBuilder!
-                .Property(m => m.Name)
-                .HasMaxLength(30)
-                .IsRequired();
-            entityTypeBuilder!
-                .Property(m => m.Description)
-                .HasMaxLength(255);
-            entityTypeBuilder!
                 .Property(m => m.Periodicity)
                 .HasConversion<EnumToStringConverter<PeriodicityType>>()
                 .HasMaxLength(

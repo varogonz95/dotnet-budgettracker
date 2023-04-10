@@ -25,4 +25,8 @@
     <Folder Include="Migrations\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\js\Budgets\create.js" />
+  </ItemGroup>
+
 </Project>
