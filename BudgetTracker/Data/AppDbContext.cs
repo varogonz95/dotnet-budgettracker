@@ -8,11 +8,16 @@ namespace BudgetTracker.Data
     {
         private readonly EntityConfigFactory _entityConfigFactory;
 
-        public AppDbContext(DbContextOptions<AppDbContext> options,
-            EntityConfigFactory entityConfigFactory)
-            : base(options)
+        public AppDbContext(
+            DbContextOptions<AppDbContext> options,
+            EntityConfigFactory entityConfigFactory
+        ) : base(options)
         {
             _entityConfigFactory = entityConfigFactory;
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
+            base.OnConfiguring(optionsBuilder);
         }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -27,7 +32,6 @@ namespace BudgetTracker.Data
         }
 
         public DbSet<Budget> Budget { get; set; } = default!;
-
-        public DbSet<BudgetTracker.Models.ExpenseDetail> ExpenseDetail { get; set; } = default!;
+        public DbSet<ExpenseDetail> ExpenseDetail { get; set; } = default!;
     }
 }

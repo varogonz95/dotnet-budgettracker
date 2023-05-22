@@ -78,15 +78,20 @@ namespace BudgetTracker.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Description,CustomPeriodicity,Periodicity")] Budget budget)
-        {
+        public async Task<IActionResult> Create(
+            [Bind("Name", "Description", "Periodicity", "FromDate", "ToDate", "Repeats")]
+            Budget budget
+        ) {
             if (ModelState.IsValid)
             {
-                _context.Add(budget);
-                await _context.SaveChangesAsync();
+                await using (_context)
+                {
+                    _context.Budget.Add(budget);
+                    await _context.SaveChangesAsync();
+                }
                 return RedirectToAction("Create", "ExpenseDetails");
             }
-            return View(budget);
+            return RedirectToAction(nameof(Create));
         }
 
         // GET: Budgets/Edit/5

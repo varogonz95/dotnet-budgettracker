@@ -25,8 +25,8 @@ namespace BudgetTracker.TagHelpers
             var innerContent = childContent.GetContent();
 
             if (innerContent.Length > offset)
-            { 
-                output.Content.SetContent(innerContent.Substring(0, innerContent.Length-offset) + suffix);
+            {
+                output.Content.SetContent(innerContent.Substring(0, innerContent.Length - offset) + suffix);
             }
 
             await base.ProcessAsync(context, output);

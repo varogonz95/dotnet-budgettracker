@@ -1,17 +1,18 @@
 $(document).ready(() => {
-    console.log("Page ready")
-
     const $periodicitySelect = $("#Periodicity")
-    const $toDateDiv = $("#ToDateDiv")
+    const $toDateWrapper = $("#ToDateWrapper")
+    const $repeatsWrapper = $("#RepeatsWrapper")
 
     $periodicitySelect.change((elm) => {
         const value = $(elm.target).val()
 
         if (value === 'Custom') {
-            $toDateDiv.toggle()
+            $toDateWrapper.show()
+            $repeatsWrapper.show()
         }
         else {
-            $toDateDiv.hide()
+            $toDateWrapper.hide()
+            $repeatsWrapper.hide()
         }
     })
 })

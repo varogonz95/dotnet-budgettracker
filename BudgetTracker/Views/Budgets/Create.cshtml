@@ -26,8 +26,8 @@
             </div>
 
             <div class="form-floating mb-3">
-                <label asp-for="Description" class="form-label" placeholder="Enter a description. (Optional)"></label>
-                <input asp-for="Description" class="form-control" />
+                <input asp-for="Description" class="form-control" placeholder="Enter a description. (Optional)" />
+                <label asp-for="Description" class="form-label"></label>
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
 
@@ -37,21 +37,29 @@
                 <span asp-validation-for="Periodicity" class="text-danger"></span>
             </div>
 
-            <div class="form-floating mb-3">
-                <input asp-for="FromDate" class="form-control" />
-                <label asp-for="FromDate" class="form-label" placeholder=""></label>
-                <span asp-validation-for="FromDate" class="text-danger"></span>
-            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-floating mb-3">
+                        <input asp-for="FromDate" class="form-control" />
+                        <label asp-for="FromDate" class="form-label" placeholder=""></label>
+                        <span asp-validation-for="FromDate" class="text-danger"></span>
+                    </div>
+                </div>
 
-            <div id="@(nameof(Model.ToDate))Div" class="form-floating mb-3" style="display: none">
-                <input asp-for="ToDate" class="form-control" />
-                <label asp-for="ToDate" class="form-label" placeholder=""></label>
-                <span asp-validation-for="FromDate" class="text-danger"></span>
-            </div>
+                <div id="@(nameof(Model.ToDate))Wrapper" class="col" style="display: none">
+                    <div class="form-floating mb-3">
+                        <input asp-for="ToDate" class="form-control" />
+                        <label asp-for="ToDate" class="form-label" placeholder=""></label>
+                        <span asp-validation-for="FromDate" class="text-danger"></span>
+                    </div>
+                </div>
 
-            <div class="form-check mb-3">
-                <input asp-for="Repeats" class="form-check-input" />
-                <label asp-for="Repeats" class="form-check-label"></label>
+                <div id="@(nameof(Model.Repeats))Wrapper" class="col" style="display: none">
+                    <div class="form-check mb-3">
+                        <input asp-for="Repeats" class="form-check-input" />
+                        <label asp-for="Repeats" class="form-check-label"></label>
+                    </div>
+                </div>
             </div>
 
             <div class="form-floating mb-3">
